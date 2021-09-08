@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peertube
+  labels:
+    app: peertube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: peertube
+  template:
+    metadata:
+      labels:
+        app: peertube
+    spec:
+      containers:
+        - name: peertube
+          image: chocobozzz/peertube:v3.4.0-rc.1-buster
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: http
+            - containerPort: 443
+              name: https
+            - containerPort: 9000
+              name: peertube
+            - containerPort: 1935
+              name: rtmp
+          envFrom:
+            - secretRef:
+                name: peertube-secret
+          env:
+            - name: PEERTUBE_REDIS_HOSTNAME
+              value: "localhost"
+            - name: PEERTUBE_REDIS_AUTH
+              value: ""
+          volumeMounts:
+            - name: peertube-data
+              mountPath: /data
+        - name: redis
+          image: redis:6-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6379
+              name: redis
+      volumes:
+        - name: peertube-data
+          persistentVolumeClaim:
+            claimName: peertube-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: peertube-data
+spec:
+  accessModes: 
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+

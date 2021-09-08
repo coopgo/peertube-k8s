@@ -1,0 +1,25 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: peertube
+spec:
+  selector:
+    app: peertube
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: http
+    - protocol: TCP
+      port: 25
+      targetPort: 25
+      name: smtp
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+      name: peertube
+    - protocol: TCP
+      name: rtmp
+      port: 1935
+      targetPort: 1935
