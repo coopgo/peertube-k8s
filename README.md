@@ -31,11 +31,11 @@ bases:
 - https://github.com/coopgo/peertube-k8s/
 ```
 
-Here we are, we have a peertube K8S configuration ! ;) (not yet in fact, you have to "kustomize" it with your own parameters -database creadentials, ingress hostnames, etc...-, it was too simple right ? ;))
+Here we are, we have a peertube K8S configuration ! ;) (not yet in fact, you have to "kustomize" it with your own parameters -database credentials, ingress hostnames, etc...-, it was too simple right ? ;))
 
 ### Environment variables
 
-To change most of the parameters of Peertube deployment, you can store environment variables in a "secret" inside your Kubernetes namespace. This can be done like in [Peertube on Kubernetes](https://forge.extranet.logilab.fr/open-source/peertube-on-kubernetes/) using Kustomize secretGenerator. (copy their kustomization.yaml example file, apprend the one we just created, and adapt environment variables to you desired values).
+To change most of the parameters of Peertube deployment, you can store environment variables in a "secret" inside your Kubernetes namespace. This can be done like in [Peertube on Kubernetes](https://forge.extranet.logilab.fr/open-source/peertube-on-kubernetes/) using Kustomize secretGenerator. (copy their kustomization.yaml example file, append to the one we just created, and adapt environment variables to your desired values).
 
 This is good for simple deployment purpose, where you do this once, or if you can store your files in a trusted location you're the only one to use. But if you want to, let's say, store your configuration in a Git repository accessible by others (for example, in your team at work, or with other teams in bigger organizations), that's bad (very very bad) in terms of security (everyone will know your database credentials, object storage access and secret keys, etc...). Instead, we use Bitnami Sealed Secrets and store the sealed secret file in the repository. This is not a lesson about Bitnami Sealed Secrets, so if you want to use it, we [let you go on their Git and documentation for installation instructions](https://github.com/bitnami-labs/sealed-secrets)).
 
@@ -132,7 +132,7 @@ And create `ingress-patch.yaml` in the same folder :
   value: peertube.your-server.com
 ```
 
-### Other confirations
+### Other configurations
 
 You should have a pretty good configuration right now. But you can go further. For example, if you want to adapt production configurations with settings not available as environment variables (for example, to disable the `tracker`) by [adapting the default configuration through the production.yaml file](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example) and using a ConfigMap :
 
@@ -243,4 +243,3 @@ patchesJson6902:
 ## Licence
 
 `coopgo/peertube-k8s` is released under GNU LGPL v2.1 licence (We simply followed the licence from [Peertube on Kubernetes](https://forge.extranet.logilab.fr/open-source/peertube-on-kubernetes/) as we took inspiration from it)
-- 
